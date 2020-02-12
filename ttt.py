@@ -1,10 +1,14 @@
 import time
 import random
+import datetime
 
-place = ["  ","  ","  ","  ","  ","  ","  ","  ","  "]
+place = [" "," "," "," "," "," "," "," "," "]
 content = ["X","O"]
-coin = [0, 0]
-pieces = {"user":" ","bot":" "}          #pieces[0] is user, pieces[1] is bot
+coin = 0
+pieces = {"user":" ","bot":" "}
+playername = " "
+gamestart = " "
+gamestart1 = " "
 
 def template():
     print("1 | 2 | 3")
@@ -44,7 +48,7 @@ def validateXO(q):
 def userMove():
     while True:
         placechoice = (validatePlace("Where would you like to mark?\n~$ ")-1)
-        if place[placechoice] == "  ":
+        if place[placechoice] == " ":
             place[placechoice] = pieces["user"]
             break
         else:
@@ -53,21 +57,23 @@ def userMove():
 
 def botMove():
     print("AI is deciding", end="")
-    time.sleep(0.3)
+    time.sleep(0.5)
     print(".", end="")
-    time.sleep(0.3)
+    time.sleep(0.5)
     print(".", end="")
-    time.sleep(0.3)
+    time.sleep(0.5)
     print(".\n")
+    time.sleep(0.7)
     while True:
         placechoice = random.randint(0,8)
-        if place[placechoice] == "  ":
+        if place[placechoice] == " ":
             place[placechoice] = pieces["bot"]
             break
     moveBuffer("bot")
 
 def moveBuffer(last):
     board()
+    checkStale()
     checkWin(last)
     if last == "user":
         botMove()
@@ -82,13 +88,47 @@ def checkWin(player):
         if x == str(pieces[player]*3):
             if player == "user":
                 print("You have won!")
-                resolve()
+                time.sleep(1)
+                resolve("u")
             elif player == "bot":
                 print("The AI has won.")
-                resolve()                 
+                time.sleep(1)
+                resolve("b")
 
-def resolve():
+def checkStale():
+    global place
+    if " " in place:
+        return
+    else:
+        resolve("s")
+    
+
+def resolve(winner):
+    global playername
+    global gamestart
+    global coin
+    global pieces
+    global content
+    gameend = datetime.datetime.now()
+    gameendt = time.time()
     bin = ["yes", "no", "y", "n"]
+    winners = {"u":playername,"b":"The AI",0:playername,1:"the AI","s":"N/A (Stalemate)"}
+    if winner == "s":
+        print("A stalemate has occurred.")
+        time.sleep(1)
+    log = open("winlog.txt", "a")
+    log.write("-"*40+"\nGame start: "+str(gamestart)+"\nGame end: "+str(gameend)+"\nGame duration: "+str(int(gameendt-gamestartt))+" seconds\nWinner: "+winners[winner]+"\nFirst move: "+winners[coin]+"\n"+playername+" piece: "+content[0]+"\nAI piece: "+content[1]+"\nFinal gameboard:\n"+place[0]+" | "+place[1]+" | "+place[2]+"\n"+"-"*10+"\n"+place[3]+" | "+place[4]+" | "+place[5]+"\n"+"-"*10+"\n"+place[6]+" | "+place[7]+" | "+place[8]+"\n"+"-"*40+"\n")
+    log.close()
+    print("\nSaving results", end="")
+    time.sleep(0.7)
+    print(".", end="")
+    time.sleep(0.7)
+    print(".", end="")
+    time.sleep(0.7)
+    print(".")
+    time.sleep(1)
+    print("Results saved.\n")
+    time.sleep(1)
     while True:
         ask = input("Would you like to play again? [Y/n]\n~$ ")
         ask = ask.lower()
@@ -105,39 +145,50 @@ def initialize():
     global pieces
     global coin
     global place
-    place = ["  ","  ","  ","  ","  ","  ","  ","  ","  "]
+    global playername
+    global gamestart
+    global gamestartt
+    place = [" "," "," "," "," "," "," "," "," "]
+    playername = input("\nChoose a username:\n~$ ")
     choice = validateXO("\nWould you like to be X's or O's?\n~$ ")
     choice = choice.upper()
     if choice == "X":
         pieces["user"] = "X"
         pieces["bot"] = "O"
-        print("Piece chosen: X\nAI piece: O\n")
+        print("\nPiece chosen: X\nAI piece: O\n")
     elif choice == "O":
         pieces["user"] = "O"
         pieces["bot"] = "X"
-        print("Piece chosen: O\nAI piece: X\n")
+        print("\nPiece chosen: O\nAI piece: X\n")
     print("Flipping coin", end="")
-    time.sleep(1)
+    time.sleep(0.5)
     print(".", end="")
-    time.sleep(1)
+    time.sleep(0.5)
     print(".", end="")
-    time.sleep(1)
+    time.sleep(0.5)
     print(".")
     time.sleep(1)
     x = random.randint(0,1)
     if x == 0:
-        coin = [0, 1]
+        coin = 0
         print("You will go first.\n")
+        time.sleep(1)
         template()
+        time.sleep(0.5)
+        gamestart = datetime.datetime.now()
+        gamestartt = time.time()
         userMove()
     elif x == 1:
-        coin = [1, 0]
+        coin = 1
         print("The AI will go first.\n")
+        time.sleep(1)
         template()
+        time.sleep(0.5)
+        gamestart = datetime.datetime.now()
+        gamestartt = time.time()
         botMove()
-    
-while True:
-    initialize()
+
+initialize()
     
     
 
