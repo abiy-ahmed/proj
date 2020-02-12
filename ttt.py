@@ -1,6 +1,7 @@
 import time
 import random
 import datetime
+import hashlib
 
 place = [" "," "," "," "," "," "," "," "," "]
 content = ["X","O"]
@@ -9,6 +10,7 @@ pieces = {"user":" ","bot":" "}
 playername = " "
 gamestart = " "
 gamestart1 = " "
+prehash = "F"
 
 def template():
     print(" 1 | 2 | 3")
@@ -47,6 +49,7 @@ def validateXO(q):
             print("Invalid input.\n")
 
 def userMove():
+    global prehash
     while True:
         placechoice = (validatePlace("Where would you like to mark? (1-9)\n~$ ")-1)
         if place[placechoice] == " ":
@@ -54,9 +57,11 @@ def userMove():
             break
         else:
             print("Place already taken.\n")
+    prehash = prehash+"U"+str(placechoice)
     moveBuffer("user")
 
 def botMove():
+    global prehash
     print("AI is deciding", end="")
     time.sleep(0.5)
     print(".", end="")
@@ -70,12 +75,13 @@ def botMove():
         if place[placechoice] == " ":
             place[placechoice] = pieces["bot"]
             break
+    prehash = prehash+"B"+str(placechoice)
     moveBuffer("bot")
 
 def moveBuffer(last):
     board()
-    checkStale()
     checkWin(last)
+    checkStale()
     if last == "user":
         botMove()
     elif last == "bot":
@@ -84,23 +90,28 @@ def moveBuffer(last):
 def checkWin(player):
     global place
     global pieces
+    global prehash
     comb = [place[0]+place[1]+place[2], place[3]+place[4]+place[5], place[6]+place[7]+place[8], place[0]+place[3]+place[6], place[1]+place[4]+place[7], place[2]+place[5]+place[8], place[0]+place[4]+place[8], place[2]+place[4]+place[6]]
     for x in comb:
         if x == str(pieces[player]*3):
             if player == "user":
                 print("You have won!")
+                prehash = prehash+"WU"
                 time.sleep(1)
                 resolve("u")
             elif player == "bot":
                 print("The AI has won.")
+                prehash = prehash+"WU"
                 time.sleep(1)
                 resolve("b")
 
 def checkStale():
+    global prehash
     global place
     if " " in place:
         return
     else:
+        prehash = prehash+"WS"
         resolve("s")
 
 def resolve(winner):
@@ -109,15 +120,19 @@ def resolve(winner):
     global coin
     global pieces
     global content
+    global prehash
     gameend = datetime.datetime.now()
     gameendt = time.time()
     bin = ["yes", "no", "y", "n"]
+    prehash = prehash+str(random.randint(100,1000))
+    checksum = hashlib.md5(prehash.encode())
+    checksum = checksum.hexdigest()
     winners = {"u":playername,"b":"The AI",0:playername,1:"The AI","s":"N/A (Stalemate)"}
     if winner == "s":
         print("A stalemate has occurred.")
         time.sleep(1)
     log = open("winlog.txt", "a")
-    log.write("-"*40+"\nGame start: "+str(gamestart)+"\nGame end: "+str(gameend)+"\nGame duration: "+str(int(gameendt-gamestartt))+" seconds\nWinner: "+winners[winner]+"\nFirst move: "+winners[coin]+"\n"+playername+" piece: "+content[0]+"\nAI piece: "+content[1]+"\nFinal gameboard:\n"+place[0]+" | "+place[1]+" | "+place[2]+"\n"+"-"*10+"\n"+place[3]+" | "+place[4]+" | "+place[5]+"\n"+"-"*10+"\n"+place[6]+" | "+place[7]+" | "+place[8]+"\n"+"-"*40+"\n")
+    log.write("-"*40+"\nGame ID: "+str(checksum[:10].upper())+"\nGame start: "+str(gamestart)+"\nGame end: "+str(gameend)+"\nGame duration: "+str(int(gameendt-gamestartt))+" seconds\nWinner: "+winners[winner]+"\nFirst move: "+winners[coin]+"\n"+playername+" piece: "+content[0]+"\nAI piece: "+content[1]+"\nFinal gameboard:\n"+place[0]+" | "+place[1]+" | "+place[2]+"\n"+"-"*10+"\n"+place[3]+" | "+place[4]+" | "+place[5]+"\n"+"-"*10+"\n"+place[6]+" | "+place[7]+" | "+place[8]+"\n"+"-"*40+"\n")
     log.close()
     print("\nSaving results", end="")
     time.sleep(0.7)
@@ -148,6 +163,8 @@ def initialize():
     global playername
     global gamestart
     global gamestartt
+    global prehash
+    prehash = "F"
     place = [" "," "," "," "," "," "," "," "," "]
     playername = input("\nChoose a username:\n~$ ")
     choice = validateXO("\nWould you like to be X's or O's? [X/O]\n~$ ")
@@ -172,6 +189,7 @@ def initialize():
     if x == 0:
         coin = 0
         print("You will go first.\n")
+        prehash = prehash+"U"
         time.sleep(1)
         template()
         time.sleep(0.5)
@@ -181,6 +199,7 @@ def initialize():
     elif x == 1:
         coin = 1
         print("The AI will go first.\n")
+        prehash = prehash+"B"
         time.sleep(1)
         template()
         time.sleep(0.5)
