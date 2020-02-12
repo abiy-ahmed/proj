@@ -11,18 +11,18 @@ gamestart = " "
 gamestart1 = " "
 
 def template():
-    print("1 | 2 | 3")
-    print("-"*10)
-    print("4 | 5 | 6")
-    print("-"*10)
-    print("7 | 8 | 9\n") 
+    print(" 1 | 2 | 3")
+    print(" "+"-"*10)
+    print(" 4 | 5 | 6")
+    print(" "+"-"*10)
+    print(" 7 | 8 | 9\n") 
     
 def board():
-    print(place[0]+" | "+place[1]+" | "+place[2])
-    print("-"*10)
-    print(place[3]+" | "+place[4]+" | "+place[5])
-    print("-"*10)
-    print(place[6]+" | "+place[7]+" | "+place[8]+"\n")
+    print("\n "+place[0]+" | "+place[1]+" | "+place[2])
+    print(" "+"-"*10)
+    print(" "+place[3]+" | "+place[4]+" | "+place[5])
+    print(" "+"-"*10)
+    print(" "+place[6]+" | "+place[7]+" | "+place[8]+"\n")
 
 def validatePlace(q):
     while True:
@@ -32,6 +32,7 @@ def validatePlace(q):
                 if x in range(1,10):
                     return x
                 else:
+                    print("Invalid number.")
                     break
         except:
             print("Please input a valid number.")
@@ -47,7 +48,7 @@ def validateXO(q):
 
 def userMove():
     while True:
-        placechoice = (validatePlace("Where would you like to mark?\n~$ ")-1)
+        placechoice = (validatePlace("Where would you like to mark? (1-9)\n~$ ")-1)
         if place[placechoice] == " ":
             place[placechoice] = pieces["user"]
             break
@@ -62,7 +63,7 @@ def botMove():
     time.sleep(0.5)
     print(".", end="")
     time.sleep(0.5)
-    print(".\n")
+    print(".")
     time.sleep(0.7)
     while True:
         placechoice = random.randint(0,8)
@@ -79,7 +80,7 @@ def moveBuffer(last):
         botMove()
     elif last == "bot":
         userMove()
-    	
+
 def checkWin(player):
     global place
     global pieces
@@ -101,7 +102,6 @@ def checkStale():
         return
     else:
         resolve("s")
-    
 
 def resolve(winner):
     global playername
@@ -112,7 +112,7 @@ def resolve(winner):
     gameend = datetime.datetime.now()
     gameendt = time.time()
     bin = ["yes", "no", "y", "n"]
-    winners = {"u":playername,"b":"The AI",0:playername,1:"the AI","s":"N/A (Stalemate)"}
+    winners = {"u":playername,"b":"The AI",0:playername,1:"The AI","s":"N/A (Stalemate)"}
     if winner == "s":
         print("A stalemate has occurred.")
         time.sleep(1)
@@ -135,7 +135,7 @@ def resolve(winner):
         if ask == "yes" or ask == "y":
             initialize()
         elif ask == "no" or ask == "n":
-            print("Thanks for playing!\n")
+            print("\nThanks for playing!\n")
             time.sleep(1)
             exit()
         else:
@@ -150,7 +150,7 @@ def initialize():
     global gamestartt
     place = [" "," "," "," "," "," "," "," "," "]
     playername = input("\nChoose a username:\n~$ ")
-    choice = validateXO("\nWould you like to be X's or O's?\n~$ ")
+    choice = validateXO("\nWould you like to be X's or O's? [X/O]\n~$ ")
     choice = choice.upper()
     if choice == "X":
         pieces["user"] = "X"
@@ -189,10 +189,3 @@ def initialize():
         botMove()
 
 initialize()
-    
-    
-
-
-    
-                
-    
