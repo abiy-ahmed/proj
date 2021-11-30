@@ -1,3 +1,4 @@
+#this sucks and needs to be updated
 import math
 rnum = float(input("Input a decimal number: "))
 wnum = rnum
