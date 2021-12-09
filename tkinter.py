@@ -1,34 +1,54 @@
 from tkinter import *
-from random import *
 
-#def jump():
-#    button1.place(relx=random(), rely=random())
+window = Tk()
+window.geometry("100x100")
 
-#master = Tk()
+login = {
+	"cyber":"Its23arly!22"
+}
 
-#button1 = Button(master, text="Hello World", command=jump)
-#button1.place(relx=0.5, rely=0.5, anchor=CENTER)
+username_label = Label(
+	master=window,
+	text="Username:"
+).grid(
+	row=0,column=0
+)
 
-#mainloop()
+username_entry = Entry(
+	master=window
+)
+username_entry.grid(
+	row=0,column=1
+)
 
-##root = Tk()
-##
-##c = Canvas(root, width=80, height=40)
-##c.pack()
-##c.create_line(0, 20, 80, 20)
-##
-##root.mainloop()
+password_label = Label(
+	master=window,
+	text="Password:"
+).grid(
+	row=1,column=0
+)
 
-root = Tk()
-def userStay():
-    print("You have chosen to stay.")
+password_entry = Entry(
+	master=window
+)
+password_entry.grid(
+	row=1,column=1
+)
 
-def userHit():
-    print("You have chosen to hit.")
+def validate_login():
+	username = username_entry.get()
+	password = password_entry.get()
+	for user,passwd in login.items():
+		if username == user and password == passwd:
+			return print("Success.")
+	print("Failed login.")
 
-buttonStay = Button(root, text="Stay",command=userStay)
-buttonStay.place(relx=0.25,rely=0.75,anchor=CENTER)
-buttonHit = Button(root, text="Hit",command=userHit)
-buttonHit.place(relx=0.75,rely=0.75,anchor=CENTER)
+submit_button = Button(
+	master=window,
+	text="Submit",
+	command=validate_login,
+).grid(
+	row=2,column=0
+)
 
-root.mainloop()
+window.mainloop()
