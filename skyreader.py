@@ -4,9 +4,6 @@ from datetime import datetime
 
 sep = "\t|\t"
 
-def bytes_to_ip(bytes):
-    return '.'.join([str(b) for b in bytes])
-
 with open("cap.sky","rb") as file:
     byte_data = file.read()
     magic_bytes = byte_data[0:8]
@@ -43,7 +40,7 @@ with open("cap.sky","rb") as file:
 
         timestamp = byte_data[i:(i+4)]
         i+=4
-        datetimestamp = str(datetime.fromtimestamp(int.from_bytes(timestamp,byteorder="big")).date())
+        datetimestamp = datetime.fromtimestamp(int.from_bytes(timestamp,byteorder="big"))
 
         print(f"Packet {str(n+1):}",end=sep)
         print(f"Src IP: {src_ip}",end=sep)
@@ -53,5 +50,4 @@ with open("cap.sky","rb") as file:
         print(f"Dest Port: ",end="")
         print(int.from_bytes(dst_port,byteorder="big"),end=sep)
         print("Time: ",end="")
-        #print(int.from_bytes(timestamp,byteorder="big"))
-        print(datetimestamp)
+        print(str(datetimestamp))
