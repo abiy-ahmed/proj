@@ -5,10 +5,7 @@ from datetime import datetime
 sep = "\t|\t"
 
 def bytes_to_ip(bytes):
-    ip = ""
-    for b in bytes:
-        ip+=str(b)+"."
-    return ip[:len(ip)-1]
+    return '.'.join([str(b) for b in bytes])
 
 with open("cap.sky","rb") as file:
     byte_data = file.read()
@@ -32,10 +29,10 @@ with open("cap.sky","rb") as file:
     entries = int.from_bytes(byte_data[i:(i+4)],byteorder="big")
     i+=4
     for n in range(0,entries):
-        src_ip = bytes_to_ip(byte_data[i:(i+4)])
+        src_ip = '.'.join([str(b) for b in byte_data[i:(i+4)]])
         i+=4
 
-        dst_ip = bytes_to_ip(byte_data[i:(i+4)])
+        dst_ip = '.'.join([str(b) for b in byte_data[i:(i+4)]])
         i+=4
 
         src_port = byte_data[i:(i+4)]
