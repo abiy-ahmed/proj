@@ -21,7 +21,6 @@ with open("cap.sky","rb") as file:
     print(f"Flag: {flag.hex()}")
 
     i = 18+flag_length
-    n = 1
     
     entries = int.from_bytes(byte_data[i:(i+4)],byteorder="big")
     i+=4
