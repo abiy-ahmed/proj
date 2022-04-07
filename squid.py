@@ -15,8 +15,5 @@ with open("squid_access.log","r") as file:
         peer_status = data[8].split("/")[0]
         peer_ip = data[8].split("/")[1]
         stype = data[9]
-
-        if rhost == "192.168.0.224":
-            print(url)
         
     
