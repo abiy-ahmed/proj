@@ -184,7 +184,6 @@ def encode():
 		used.add(word)
 	while len(used) < WORDLIST_LENGTH:
 		rand = pad(random_word())
-		print(rand)
 		used.add(rand)
 		#rand_line = str(randint(1,10000))
 		#head = subprocess.Popen(["head","-n",rand_line,"popular.txt"], stdout=subprocess.PIPE)
@@ -213,7 +212,8 @@ def encode():
 		sfile.write("#include <stdio.h>\n")
 		for word in used:
 			sfile.write("int _"+word+"(){return 0;}\n")
-		sfile.write("int main(){printf(\"meet me at midnight\");return 0;}\n")
+		phrase = input("Write a misdirection phrase:\n> ")
+		sfile.write("int main(){printf(\""+phrase+"\");return 0;}\n")
 
 	print("Compiling binary...")
 	gcc = subprocess.call(["gcc",SOURCE_FILE_NAME,"-o",BINARY_FILE_NAME])
@@ -287,7 +287,7 @@ def decode():
 	numlist = list()
 	for line in strings:
 		line = line.rstrip()
-		if len(line) > 1 and len and line.isupper() and line[1:].isalnum() and len(line[1:])%2==0:
+		if len(line) > 1 and len and line[1:].isalnum() and len(line[1:])%2==0:
 			numlist.append(line[1:])
 
 	print(f"{len(numlist)} possible words found.")
