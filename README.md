@@ -4,6 +4,9 @@ disco.py
 A CLI tool for my custom cipher named the "Disco" cipher. I designed and implemented it for an EOC project my freshman year of college.
 Link to presentation: https://docs.google.com/presentation/d/1ia7eonD8dAXuNkDGN7hvOPAoIQj5Gtngd3KB2CbGMxw/edit?usp=sharing
 
+fakedox.py
+A fake "doxx" generator that generates a completely random but plausible identity. Joke script for discord chats.
+
 hangman.py
 Simple terminal-based hangman game where you can customize the source of phrases, and game results are saved to a file.
 
