@@ -2,6 +2,7 @@
 FAKEDOX 0.0.1
 
 Import handler inspired by https://github.com/AOS-GUI/AOS-GUI
+Firefox required
 '''
 
 try:
@@ -34,11 +35,11 @@ EMAIL_DOMAINS = ["gmail.com","yahoo.com"]
 MAC_PREFIXES = ["00:13:CA","00:1C:B3","00:1D:09","00:A0:83","1C:E2:CC","54:9F:13","54:9F:35","74:E2:8C","9C:74:1A","B0:79:08","C8:B5:AD","D4:8F:33","E0:63:E5"]
 HEX_SET = "0123456789ABCDEF"
 OPTIONS = FirefoxOptions()
-OPTIONS.headless = True
+OPTIONS.add_argument("-headless")
 N_TABS = 2
 LOGGING = True
 
-def waitforelement(driver,byvar,byval,timeout=10):
+def waitforelement(driver,byvar,byval,timeout=20):
     element = None
     t = 0
     while True:
@@ -160,10 +161,16 @@ def randhc():
     return random.choice(list(providers)).capitalize()
 
 def get_longest_key(d):
-    pass
+    return max([len(key) for key in d.keys()])
 
-def randaddress():
-    pass
+def display_details(details,discordReadable=False):
+    total_spaces = get_longest_key(details)+8
+    for key,value in details.items():
+        if value == None: continue
+        if discordReadable:
+            print(key+":"+"**"+" "*(total_spaces-len(key)-1)+"**"+value)
+        else:
+            print(key+":"+" "*(total_spaces-len(key)-1)+value)
 
 def main():
     logging.basicConfig(level=logging.INFO)
@@ -264,54 +271,44 @@ def main():
     logging.info("Generating healthcare provider...")
     healthcare = randhc()
 
-    # details = {
-    #     "USERNAME":discname,
-    #     "ID":discid,
-    #     "SESSION TOKEN":disctoken,
-    #     "NAME":fname+" "+lname,
-    #     "EMAIL":email,
-    #     "PHONE #":phone_number,
-    #     "ADDRESS":address,
-    #     "DOB":dob,
-    #     "PUBLIC IPV4":ipv4,
-    #     "MAC ADDRESS":mac,
-    #     "SCHOOL":school,
-    #     "SCHOOL ADDRESS":schooladdr,
-    #     "WORK":work,
-    #     "WORK ADDRESS":workaddr,
-    #     "WORK #":worknum,
-    #     "SSN":ssn,
-    #     "BANK":bank,
-    #     "ROUTING #":aba,
-    #     "ACCOUNT #":accountnum,
-    #     "CARD #":cardnum,
-    #     "EXP. DATE":exp_date,
-    #     "CVV":cvv,
-    #     "HEALTHCARE PROVIDER":healthcare
-    # }
-    if discname: print("USERNAME:"+"\t"*N_TABS+discname)
-    if discid: print("ID:"+"\t"*(N_TABS+1)+discid)
-    if disctoken: print("SESSION TOKEN:"+"\t"*N_TABS+disctoken)
-    if fname and lname: print("NAME:"+"\t"*(N_TABS+1)+fname+" "+lname)
-    if email: print("EMAIL:"+"\t"*(N_TABS+1)+email)
-    if phone_number: print("PHONE #:"+"\t"*N_TABS+phone_number)
-    if address: print("ADDRESS:"+"\t"*N_TABS+address)
-    if dob: print("DOB:"+"\t"*(N_TABS+1)+dob)
-    if ipv4: print("PUBLIC IPV4:"+"\t"*N_TABS+ipv4)
-    if mac: print("MAC ADDRESS:"+"\t"*N_TABS+mac)
-    if school: print("SCHOOL:"+"\t"*(N_TABS+1)+school)
-    if schooladdr: print("SCHOOL ADDRESS:"+"\t"*N_TABS+schooladdr)
-    if work: print("WORK:"+"\t"*(N_TABS+1)+work)
-    if workaddr: print("WORK ADDRESS:"+"\t"*N_TABS+workaddr)
-    if worknum: print("WORK #:"+"\t"*(N_TABS+1)+worknum)
-    if ssn: print("SSN:"+"\t"*(N_TABS+1)+ssn)
-    if bank: print("BANK:"+"\t"*(N_TABS+1)+bank)
-    if aba: print("ROUTING #:"+"\t"*N_TABS+aba)
-    if accountnum: print("ACCOUNT #:"+"\t"*N_TABS+accountnum)
-    if cardnum: print("CARD #:"+"\t"*(N_TABS+1)+cardnum)
-    if exp_date: print("EXP. DATE:"+"\t"*N_TABS+exp_date)
-    if cvv: print("CVV:"+"\t"*(N_TABS+1)+cvv)
-    if healthcare: print("HEALTHCARE PROVIDER:"+"\t"*(N_TABS-1)+healthcare)
+    details = {
+        "USERNAME":discname,
+        "ID":discid,
+        "SESSION TOKEN":disctoken,
+        "NAME":fname+" "+lname,
+        "EMAIL":email,
+        "PHONE #":phone_number,
+        "ADDRESS":address,
+        "DOB":dob,
+        "PUBLIC IPV4":ipv4,
+        "MAC ADDRESS":mac,
+        "SCHOOL":school,
+        "SCHOOL ADDRESS":schooladdr,
+        "WORK":work,
+        "WORK ADDRESS":workaddr,
+        "WORK #":worknum,
+        "SSN":ssn,
+        "BANK":bank,
+        "ROUTING #":aba,
+        "ACCOUNT #":accountnum,
+        "CARD #":cardnum,
+        "EXP. DATE":exp_date,
+        "CVV":cvv,
+        "HEALTHCARE PROVIDER":healthcare
+    }
+    
+    while True:
+        display_details(details)
+        choice = input("Add/edit/delete entries or leave blank [Ex: 'NAME:None']:\n> ").strip().split(":")
+        print(choice)
+        if len(choice) != 2:
+            break
+        key = choice[0].upper()
+        value = choice[1]
+        if value == "None":
+            details[key] = None
+        else:
+            details[key] = choice[1]
 
 if __name__ == "__main__":
     main()
