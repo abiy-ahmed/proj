@@ -14,7 +14,7 @@ def populate_signatures():
     for tr in tr_list:
         td_list = tr.find_all("td")
         if len(td_list) < 4: continue
-        try:    
+        try:
             hex_sig = td_list[0].find("code").text.strip().replace(" ","").replace("?","0")
             hex_sig = bytes.fromhex(hex_sig)
             #offset = int(td_list[2].text.strip())
@@ -29,7 +29,6 @@ def populate_signatures():
 def main():
     original = b''
     signatures = populate_signatures()
-    print(signatures)
     with open(__file__,"rb") as source:
         original+=source.read()
     try:
