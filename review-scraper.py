@@ -132,7 +132,15 @@ def main():
 
             n_places = len(driver.find_elements(By.CLASS_NAME,"VkpGBb"))
             driver.refresh()
-            for i in range(n_places):
+
+            place_links = driver.find_elements(By.XPATH,"//a[@jsname='kj0dLd']")
+            for i in range(len(place_links)):
+                if i%2 != 0:
+                    continue
+                place_links[i].click()
+                popup_x_button = wait_for_element(driver,By.XPATH,"//svg[@xmlns='http://www.w3.org/2000/svg']/path")
+                popup_x_button.click()
+                place_links[i].click()
                 #place_link = wait_for_element(driver,By.XPATH,f"//div[@class='VkpGBb'][{i+1}]/div[@class='cXedhc']/a[2]")
                 #place_link = wait_for_element(driver,By.XPATH,f"//div[@class='cXedhc'][{i+1}]/a[1]")
                 #place_link = wait_for_element(driver,By.XPATH,f"//div[@jscontroller='EfJGEe']/div[{(i+1)*2}]//div[@class='cXedhc']/a[1]")
@@ -140,8 +148,6 @@ def main():
                 #                         .until(expected_conditions.presence_of_element_located((By.XPATH, f"//div[@class='VkpGBb'][{i+1}]/div[@class='cXedhc']/a[1]")))
                 
                 #place_link.click()
-                
-
                 popup = wait_for_element(driver,By.CLASS_NAME,"xpdopen")
 
                 title = wait_for_element(driver,By.XPATH,"//div[@class='xpdopen']//div[@class='SPZz6b']/h2/span").text
