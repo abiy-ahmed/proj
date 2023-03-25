@@ -1,4 +1,4 @@
-# proj
+# pythonproj
 
 disco.py
 A CLI tool for my custom cipher named the "Disco" cipher. I designed and implemented it for an EOC project my freshman year of college.
