@@ -16,6 +16,12 @@ A GUI login program I created to learn the basics of Tk.
 piglatin.py
 A CLI tool for translating text to and from pig latin.
 
+review-scraper.py
+A Google reviews scraper that takes a City/Region name as input, and attempts to scrape reviews from as many places within the region that it can find.
+
+rps.py
+A multiplayer command-line game wherein 2 connected users play rock-paper-scissors, and the loser get booted off the system.
+
 schizo.py
 A script that constantly modifies its own magic bytes to appear as if it were a different filetype.
 
